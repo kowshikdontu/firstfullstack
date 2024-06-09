@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create a Club</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="form-container">
+        <h1>Create a Club</h1>
+        <form id="createClubForm" method="post" action="{{ url_for('auth.register') }}">
+            <div class="input-group">
+                <input type="text" id="president_name" name="presidentName" required>
+                <label for="president_name">President's Name</label>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+            </div>
+            <div class="input-group">
+                <input type="text" id="club_name" name="clubName" required>
+                <label for="club_name">Club Name</label>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+            </div>
+            <div class="input-group">
+                <input type="text" id="club_code" name="clubCode" required>
+                <label for="club_code">Club Code</label>
+                <span class="highlight"></span>
+                <span class="bar"></span>
+            </div>
+            <button type="submit">Create Club</button>
+        </form>
+    </div>
+</body>
+</html>
