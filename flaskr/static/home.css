@@ -1,0 +1,73 @@
+/* home.css */
+
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+section {
+    padding: 20px;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* Form styling*/
+.form1 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+/* Ticket styling */
+#sections{
+    padding: 10px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.tickets {
+    display: flex;
+    flex-direction: column;
+}
+
+.ticket {
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 200px;
+    background-color: #fff;
+    transition: background-color 0.3s;
+}
+
+.ticket:hover {
+    background-color: #f0f0f0;
+}
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+/* Iframe styling */
+#ticket-form-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    float:right;
+}

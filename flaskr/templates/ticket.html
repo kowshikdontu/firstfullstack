@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket Form</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='ticket.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            overflow: auto; /* Enable scrolling if content overflows */
+        }
+    </style>
+</head>
+<body>
+<main class="flex-container">
+    <div class="main-content">
+    <form id ="ticketForm"  method="POST">
+        <label for="tname">Ticket Name:</label>
+        <input type="text" id="tname" name="tname" value="{{ ticket.tname  if ticket else '' }}" required>
+            <script>
+                if (ticket) {
+                    document.getElementById('tname').readOnly = true;
+                } else{
+                    var a = document.getElementById('tname').value;
+                    if (a === "new") {
+                        alert("new cannot be a ticket name");
+                        document.getElementById('tname').value = 'none';
+                    }
+                }
+            </script>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows>{{ ticket.description if ticket else "" }}</textarea>
+        <label for="team">Team Name</label>
+        <input type="text" id="team" name="team" value="{{ ticket.team if ticket else '' }}">
+        <label for="deadline">Deadline</label>
+        <input type="datetime-local" id="deadline" name="deadline" value="{{ ticket.team if ticket else '' }}">
+        <label for="status">Status-{{ ticket.status if ticket else '' }}</label>
+        <select id="status" name="status">
+            <option value="available">Available</option>
+            <option value="in-progress">in-progress</option>
+        </select>
+        <script>
+            var condition = {{ position in ["president","creater"] }};
+            var dropdown = document.getElementById("status");
+            if (condition) {
+              dropdown.disabled = false;
+            } else {
+              dropdown.disabled = true;
+            }
+        </script>
+        <label for="priority">Priority-{{ ticket.priority }}</label>
+        <select id="priority" name="priority">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+        </select>
+        <script>
+            var condition = {{ position in ["president","creater"] }};
+            var dropdown = document.getElementById("priority");
+            if (condition) {
+              dropdown.disabled = false;
+            } else {
+              dropdown.disabled = true;
+            }
+        </script>
+        <label for="assigned_for">Assigned To:</label>
+        <input type="text" id="assigned_for" name="assigned_for" value="{{ ticket.assigned_for }}">
+        <label for="points">Points:</label>
+        <input type="number" id="points" name="points" value="{{ ticket.points if ticket else '' }}">
+        <label for="submitted_time">Submitted_time</label>
+        <input type="datetime-local" id="submitted_time" name="submitted_time" value="{{ ticket.submitted_time if ticket else '' }}"><br>
+        {% if position in ['president' , 'creater'] %}
+                <script>
+                    alter("buttons of creator")
+                </script>
+                <button type="button" onclick="crud_ticket()">{{ 'Create' if not ticket else 'Edit' }}</button>
+                <button type="button" onclick="del_ticket()">Delete</button>
+                {% if ticket.status in ['requested', 'review'] %}
+                    <button type="button" onclick="approve_ticket()">Approve</button>
+                {% endif %}
+        {% else %}
+                {% if ticket.status == 'available' %}
+                    <button type="button" onclick="request_ticket()">Request</button>
+                {% elif ticket.status == 'requested' %}
+                    <button type="button" onclick="withdraw_ticket()">Withdraw</button>
+                {% elif ticket.status == 'in-progress' %}
+                    <button type="button" onclick="review_ticket()">Mark as Review</button>
+                {% endif %}
+        {% endif %}
+
+    </form>
+    </div>
+    <iframe id="ticket-form-iframe" class="ticket-iframe"></iframe>
+</main>
+<script>
+    function showTicketDetail(ticketId) {
+        var baseUrl = "{{ url_for('home.render', tname='') }}";  // This gives you the base URL
+        var newUrl = baseUrl + ticketId + "/ticket";
+        var iframe = document.getElementById('ticket-form-iframe');
+        iframe.src = newUrl;
+        iframe.style.display = 'block';
+    }
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    function submitTicketForm() {
+        var form = $('#ticketForm');
+        $.ajax({
+            url: form.attr('action'),
+            type: 'POST',
+            data: form.serialize(),
+            success: function(response) {
+                if (response.success) {
+                    // Refresh the parent page
+                    window.parent.location.reload();
+                } else {
+                    alert('There was an error processing the form.');
+                }
+            }
+        });
+    }
+
+    function crud_ticket() {
+        var form = document.getElementById('ticketForm');
+        form.action = '{{ url_for('home.create') }}';
+        alert("Do you want to submit?");
+        submitTicketForm();
+    }
+
+    function del_ticket() {
+        var form = document.getElementById('ticketForm');
+        var baseUrl = "{{ url_for('home.delete', tname='') }}";
+        var newUrl = baseUrl + form.tname.value;
+        form.action = newUrl;
+        alert("Do you want to delete?");
+        submitTicketForm();
+    }
+
+    function approve_ticket() {
+        var form = document.getElementById('ticketForm');
+        var baseUrl = "{{ url_for('home.approve', tname='') }}";
+        var newUrl = baseUrl + form.tname.value;
+        form.action = newUrl;
+        alert("Do you want to approve?");
+        submitTicketForm();
+    }
+
+    function request_ticket() {
+        var form = document.getElementById('ticketForm');
+        var baseUrl = '{{ url_for('home.requested', tname="") }}';
+        var newUrl = baseUrl + form.tname.value;
+        form.action = newUrl;
+        alert("Do you want to request?");
+        submitTicketForm();
+    }
+
+    function withdraw_ticket() {
+        var form = document.getElementById('ticketForm');
+        var baseUrl = '{{ url_for('home.withdraw', tname="") }}';
+        var newUrl = baseUrl + form.tname.value;
+        form.action = newUrl;
+        alert("Do you want to withdraw?");
+        submitTicketForm();
+    }
+
+    function review_ticket() {
+        var form = document.getElementById('ticketForm');
+        var baseUrl = '{{ url_for('home.review', tname="") }}';
+        var newUrl = baseUrl + form.tname.value;
+        form.action = newUrl;
+        alert("Do you want to ask review?");
+        submitTicketForm();
+    }
+</script>
+</body>
+</html>

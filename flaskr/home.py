@@ -72,7 +72,7 @@ def create():
                 ticket_keys = ["tname", "description", "team", "deadline", "status", "priority", "assigned_for", "points",
                                "submitted_time"]
                 ticket_values = tuple(ticket[key] for key in ticket_keys)
-
+                print(existing_ticket,ticket_values)
                 if existing_ticket is None:
                     db.execute(
                         f"INSERT INTO {t} (tname, description, team, deadline, status, priority, assigned_for, points, submitted_time) "
