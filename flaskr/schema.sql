@@ -1,6 +1,5 @@
-DROP table Clubs;
-drop table belongsTo;
-
+DROP TABLE IF EXISTS Clubs;
+DROP TABLE IF EXISTS belongsTo;
 CREATE TABLE Clubs (
     club_name TEXT PRIMARY KEY,
     president_name TEXT NOT NULL,

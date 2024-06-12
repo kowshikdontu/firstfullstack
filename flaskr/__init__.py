@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flaskr.db import init_db
 def create_app(test_config=None):
     app=Flask(__name__,instance_relative_config=True)
     app.config.from_mapping(
@@ -21,7 +22,14 @@ def create_app(test_config=None):
 
     from . import db
     db.init_app(app)
+    from . import home
+    app.register_blueprint(home.bp)
     from . import auth
     app.register_blueprint(auth.bp)
 
+
+
     return app
+if __name__ == "__main__":
+    app = create_app()
+    app.run(debug=True)

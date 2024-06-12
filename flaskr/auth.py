@@ -1,5 +1,4 @@
 import functools
-
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
@@ -32,18 +31,19 @@ def register():
                 )
                 db.execute(
                     "INSERT INTO belongsTo (club_name, mem_name, positioned_in, password) VALUES (?, ?, ?, ?)",
-                    (c_name, p_name, "core_president", generate_password_hash(c_code))
+                    (c_name, p_name, "creater", generate_password_hash(c_code))
                 )
 
                 db.execute(f"CREATE TABLE {tTable_id} ( \
-                                ticket_id INTEGER PRIMARY KEY, \
+                                tname INTEGER PRIMARY KEY AUTOINCREMENT, \
                                 description TEXT, \
-                                team_type TEXT, \
+                                team TEXT, \
                                 deadline DATE, \
                                 status TEXT, \
                                 priority INTEGER, \
                                 assigned_for TEXT, \
-                                submitter_time TIMESTAMP \
+                                points Number,\
+                                submitted_time TIMESTAMP \
                             );")
                 db.commit()
             except db.IntegrityError:
@@ -61,23 +61,25 @@ def login():
         cname = request.form['clubName']
         mname = request.form['memName']
         pwd = request.form['clubCode']
-
+        print(cname,mname)
         db = get_db()
         error = None
         member = db.execute(
             'SELECT * FROM belongsTo WHERE club_name = ? AND mem_name = ?', (cname, mname)
         ).fetchone()
-
+        print(member)
         if member is None:
             error = 'Incorrect club name.'
         elif not check_password_hash(member['password'], pwd):
             error = 'Incorrect password.'
-
+        print(error)
         if error is None:
             session.clear()
             session['mname'] = member['mem_name']
             session['cname'] = member['club_name']
-            return redirect(url_for('auth.register'))
+            session["position"]=member["positioned_in"]
+            session["clubcode"]=pwd
+            return redirect(url_for('home.index'))
 
         flash(error)
 
