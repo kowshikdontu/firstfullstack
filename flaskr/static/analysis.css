@@ -1,0 +1,169 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #e9e9e9;
+}
+
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2em;
+    color: #333333;
+}
+
+.blackbox {
+    width: 300px;
+    padding: 20px;
+    background-color: #282828;
+    border-radius: 10px;
+    text-align: center;
+    margin: 0; /* Remove the margin so it aligns properly */
+}
+
+.circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #181818;
+    position: relative;
+    margin: 20px auto;
+}
+
+.circle::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #282828;
+    z-index: -1;
+}
+
+.progress {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    clip-path: polygon(50% 50%, 100% 50%, 100% 100%);
+    z-index: 1;
+}
+
+.number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.label {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.priority {
+    margin-top: 20px;
+}
+
+.priority button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #383838;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.priority button:hover {
+    background-color: #484848;
+}
+
+.priority button.easy {
+    color: #00d699;
+}
+
+.priority button.hard {
+    color: #ff6347;
+}
+
+.overall-progress,
+.topper-list {
+    margin-bottom: 20px;
+}
+
+.overall-progress h2,
+.topper-list h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    color: #444444;
+}
+
+.progress-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.progress-item .label {
+    font-weight: bold;
+    color: #555555;
+}
+
+.progress-item .value {
+    color: #777777;
+}
+
+.topper-list table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.topper-list th,
+.topper-list td {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    text-align: left;
+}
+
+.topper-list th {
+    background-color: #f5f5f5;
+    color: #333333;
+}
+
+.topper-list tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.topper-list tbody tr:hover {
+    background-color: #f1f1f1;
+}

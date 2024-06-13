@@ -35,15 +35,15 @@ def register():
                 )
 
                 db.execute(f"CREATE TABLE {tTable_id} ( \
-                                tname INTEGER PRIMARY KEY AUTOINCREMENT, \
+                                tname TEXT, \
                                 description TEXT, \
                                 team TEXT, \
-                                deadline DATE, \
+                                deadline TEXT, \
                                 status TEXT, \
-                                priority INTEGER, \
+                                priority TEXT, \
                                 assigned_for TEXT, \
-                                points Number,\
-                                submitted_time TIMESTAMP \
+                                points TEXT,\
+                                submitted_time TEXT \
                             );")
                 db.commit()
             except db.IntegrityError:

@@ -41,7 +41,7 @@
                         <select id="memname" name="nameSelect" style="margin: 5px 0;" onchange="syncInputWithSelect()">
                             <option value="">Select a member...</option>
                             {% for i in members %}
-                            <option value="{{ i }}">{{ i }}</option>
+                            <option value="{{ i.mem_name }}">{{ i.mem_name }}</option>
                             {% endfor %}
                         </select>
                         <input type="text" id="memnameInput" name="name" placeholder="Or enter a new member name" style="margin: 5px 0;" oninput="syncSelectWithInput()"><br>
@@ -76,10 +76,10 @@
                                 }
                             }
                         </script>
-                        <div style="flex-direction:row">
+                        <div  style="flex-direction:row">
                             <p style="margin: 5p">Access:</p>
                             <label for="member1" >Presidential</label>
-                            <input type="radio" id="member1" name="mem" value="president">
+                            <input type="radio" id="member1" name="member" value="president">
                             <label for="member2" >Normal</label>
                             <input type="radio" id="member2" name="member" value="member" >
                         </div>
@@ -151,7 +151,7 @@
                     <h2>{{ sec }}</h2>
                     <div class="tickets" id="tickets">
                         {% for ticket in tickets[sec] %}
-                        <div class="ticket" data-ticket-name="{{ ticket.name }}" onclick="showTicketDetail('{{ ticket.name }}')">
+                        <div class="ticket" data-ticket-name="{{ ticket.name }}" onclick="showTicketDetail( '{{ ticket.tname }}' )">
                             <h3>{{ ticket.name }}</h3>
                             <p>{{ ticket.description }}</p>
                             <p style="color:rgba(255,0,0,0.6);">Status: {{ ticket.status }}</p>

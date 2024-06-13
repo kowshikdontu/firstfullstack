@@ -22,15 +22,20 @@ def index():
     cname = session["cname"]
     t = get_tickets(cname)
     print(session["position"])
+    print(t)
     tickets=defaultdict(lambda:[])
     s = ["review", "requested", "in-progress", "available", "completed"]
     for i in t:
-        tickets[i.status].append(i)
+        tickets[i["status"]].append(i)
+    else:
+        print("for ended",dict(tickets))
     db = get_db()
+
     m = db.execute(
         "SELECT DISTINCT mem_name FROM belongsTo WHERE club_name=?",
         (cname,)
     )
+    print(dict(tickets))
     return render_template("home.html", tickets=tickets,sections=s,user=session["position"],members=m)
 
 
@@ -59,7 +64,7 @@ def create():
             a=db.execute(
                 "select mem_name from belongsTo where club_name=? and mem_name=?",
                 (session["cname"],ticket["assigned_for"])
-            )
+            ).fetchone()
             if a==None:
                 error="such member doesnot exist"
         if error==None:
@@ -74,24 +79,27 @@ def create():
                 ticket_values = tuple(ticket[key] for key in ticket_keys)
                 print(existing_ticket,ticket_values)
                 if existing_ticket is None:
+                    print("inserting")
                     db.execute(
-                        f"INSERT INTO {t} (tname, description, team, deadline, status, priority, assigned_for, points, submitted_time) "
-                        f"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        f"INSERT INTO {t}(tname, description, team, deadline, status, priority, assigned_for, points, submitted_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                         ticket_values
                     )
+                    print("inserted")
                 else:
-                    k=[ticket[key] for key in ticket_keys[1:]]
-                    k.append(ticket["tname"])
+                    k = [ticket[key] for key in ticket_keys[1:]]  # Get the values excluding 'tname'
                     db.execute(
                         f'UPDATE {t} SET description = ?, team = ?, deadline = ?, status = ?, priority = ?, assigned_for = ?, points = ?, submitted_time = ? '
-                        f'WHERE tname = ?',
-                        tuple(k)
+                        f'WHERE tname = ? ',
+                        tuple(k) + (ticket["tname"],)  # Add tname and cname to the tuple
                     )
+
+                print("committing")
                 db.commit()
-            except db.IntegrityError:
+                print("comitted")
+            except db.IntegrityError as e:
                 error = "Database error. Please contact the admin."
                 flash(error)
-                print(error)
+                print(error,e)
             else:
                 return jsonify(success=True)
         else:
@@ -124,7 +132,7 @@ def delete(tname):
     db = get_db()
     db.execute(f'DELETE FROM {cname + "Tickets"} WHERE tname = ?', (tname,))
     db.commit()
-    return redirect(url_for('home.index'))
+    return jsonify(success=True)
 
 
 @bp.route("/<tname>/request", methods=["POST"])
@@ -134,8 +142,17 @@ def requested( tname):
     db = get_db()
     p = get_ticket(cname, tname)
     if p["status"] == "available":
-        assigned_for = json.loads(p["assigned_for"]) if p["assigned_for"] else []
+        # Ensure assigned_for is properly initialized
+        if p["assigned_for"]:
+            try:
+                assigned_for = json.loads(p["assigned_for"])
+            except json.JSONDecodeError:
+                assigned_for = []
+        else:
+            assigned_for = []
+
         assigned_for.append(session["mname"])
+
         db.execute(
             f'UPDATE {cname + "Tickets"} SET status = ?, assigned_for = ? WHERE tname = ?',
             ("requested", json.dumps(assigned_for), tname)
@@ -143,7 +160,7 @@ def requested( tname):
     else:
         flash("This ticket is already assigned.")
     db.commit()
-    return redirect(url_for('home.index'))
+    return jsonify(success=True)
 
 
 @bp.route("/<tname>/withdraw", methods=["POST"])
@@ -163,7 +180,7 @@ def withdraw(tname):
     else:
         flash("Cannot withdraw as the ticket is already approved.")
     db.commit()
-    return redirect(url_for('home.index'))
+    return jsonify(success=True)
 
 
 @bp.route("/<tname>/approve", methods=["POST"])
@@ -187,7 +204,7 @@ def approve(tname):
     else:
         flash("Cannot approve as the ticket is already in progress.")
     db.commit()
-    return redirect(url_for('home.index'))
+    return jsonify(success=True)
 
 
 @bp.route("/<tname>/review", methods=["POST"])
@@ -204,7 +221,7 @@ def review(tname):
     else:
         flash("Cannot move to review status.")
     db.commit()
-    return redirect(url_for('home.index'))
+    return jsonify(success=True)
 @bp.route('/<tname>/ticket',methods=["GET","POST"])
 def render(tname):
     if request.method == "POST":
@@ -214,7 +231,7 @@ def render(tname):
     t = session["cname"] + "Tickets"
 
     existing_ticket = db.execute(
-        f'SELECT * FROM {t} WHERE tname = ?', (tname,)
+        f'SELECT * FROM {t} WHERE tname = ?' , (tname,)
     ).fetchone()
     print(existing_ticket)
     return render_template('ticket.html',ticket=existing_ticket,position=session["position"])
@@ -247,20 +264,21 @@ def add_mem():
 @login_required
 def del_mem():
     n = request.form["name"]
-    a = request.form["member"]
+
     db = get_db()
     b = db.execute(
         f"SELECT * FROM belongsTo WHERE club_name=? and mem_name=? ",
         (session["cname"], n)
     ).fetchone()
+    print(b)
     if b :
-        if b.positioned_in !=("creator" or "president"):
+        if b["positioned_in"] not in ["creator" , "president"]:
             db.execute(
                 "DELETE FROM belongsTo WHERE mem_name = ? and club_name=?",
                 (n,session["cname"])
             )
         else:
-            if b.positioned_in == "president":
+            if b["positioned_in"] == "president":
                 if session["position"] == "creator":
                     db.execute(
                         "DELETE FROM belongsTo WHERE mem_name = ? and club_name=?",
@@ -268,6 +286,7 @@ def del_mem():
                     )
                 else:
                     flash("only creator can delete president")
+        db.commit()
     else:
         flash("no such member exist, use dropdown list")
     return "",204

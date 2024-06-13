@@ -33,11 +33,13 @@
         <input type="text" id="tname" name="tname" value="{{ ticket.tname  if ticket else '' }}" required>
             <script>
                 if (ticket) {
-                    document.getElementById('tname').readOnly = true;
+                    var tnameInput = document.getElementById('tname');
+                    tnameInput.readOnly = true;
                 } else{
                     var a = document.getElementById('tname').value;
                     if (a === "new") {
                         alert("new cannot be a ticket name");
+                        document.getElementById('tname').readOnly = false;
                         document.getElementById('tname').value = 'none';
                     }
                 }
@@ -84,9 +86,6 @@
         <label for="submitted_time">Submitted_time</label>
         <input type="datetime-local" id="submitted_time" name="submitted_time" value="{{ ticket.submitted_time if ticket else '' }}"><br>
         {% if position in ['president' , 'creater'] %}
-                <script>
-                    alter("buttons of creator")
-                </script>
                 <button type="button" onclick="crud_ticket()">{{ 'Create' if not ticket else 'Edit' }}</button>
                 <button type="button" onclick="del_ticket()">Delete</button>
                 {% if ticket.status in ['requested', 'review'] %}
@@ -144,7 +143,7 @@
     function del_ticket() {
         var form = document.getElementById('ticketForm');
         var baseUrl = "{{ url_for('home.delete', tname='') }}";
-        var newUrl = baseUrl + form.tname.value;
+        var newUrl = "/" + form.tname.value+baseUrl ;
         form.action = newUrl;
         alert("Do you want to delete?");
         submitTicketForm();
@@ -153,7 +152,7 @@
     function approve_ticket() {
         var form = document.getElementById('ticketForm');
         var baseUrl = "{{ url_for('home.approve', tname='') }}";
-        var newUrl = baseUrl + form.tname.value;
+        var newUrl = "/" + form.tname.value+baseUrl;
         form.action = newUrl;
         alert("Do you want to approve?");
         submitTicketForm();
@@ -162,7 +161,7 @@
     function request_ticket() {
         var form = document.getElementById('ticketForm');
         var baseUrl = '{{ url_for('home.requested', tname="") }}';
-        var newUrl = baseUrl + form.tname.value;
+        var newUrl = "/" + form.tname.value+baseUrl ;
         form.action = newUrl;
         alert("Do you want to request?");
         submitTicketForm();
@@ -171,7 +170,7 @@
     function withdraw_ticket() {
         var form = document.getElementById('ticketForm');
         var baseUrl = '{{ url_for('home.withdraw', tname="") }}';
-        var newUrl = baseUrl + form.tname.value;
+        var newUrl = "/" + form.tname.value+baseUrl;
         form.action = newUrl;
         alert("Do you want to withdraw?");
         submitTicketForm();
@@ -180,7 +179,7 @@
     function review_ticket() {
         var form = document.getElementById('ticketForm');
         var baseUrl = '{{ url_for('home.review', tname="") }}';
-        var newUrl = baseUrl + form.tname.value;
+        var newUrl = "/" + form.tname.value + baseUrl  ;
         form.action = newUrl;
         alert("Do you want to ask review?");
         submitTicketForm();
