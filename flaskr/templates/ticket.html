@@ -85,20 +85,25 @@
         <input type="number" id="points" name="points" value="{{ ticket.points if ticket else '' }}">
         <label for="submitted_time">Submitted_time</label>
         <input type="datetime-local" id="submitted_time" name="submitted_time" value="{{ ticket.submitted_time if ticket else '' }}"><br>
-        {% if position in ['president' , 'creater'] %}
+
+        {% if position == 'creater' or  (position == 'president' and memname == ticket.assigned_by) %}
                 <button type="button" onclick="crud_ticket()">{{ 'Create' if not ticket else 'Edit' }}</button>
                 <button type="button" onclick="del_ticket()">Delete</button>
                 {% if ticket.status in ['requested', 'review'] %}
                     <button type="button" onclick="approve_ticket()">Approve</button>
                 {% endif %}
         {% else %}
-                {% if ticket.status == 'available' %}
+            {% if ticket.status == 'available' %}
                     <button type="button" onclick="request_ticket()">Request</button>
-                {% elif ticket.status == 'requested' %}
+            {% endif %}
+            {% if memname in assignedfor %}
+
+                {% if ticket.status == 'requested' %}
                     <button type="button" onclick="withdraw_ticket()">Withdraw</button>
                 {% elif ticket.status == 'in-progress' %}
                     <button type="button" onclick="review_ticket()">Mark as Review</button>
                 {% endif %}
+            {% endif %}
         {% endif %}
 
     </form>

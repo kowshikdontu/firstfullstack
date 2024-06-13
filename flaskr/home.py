@@ -76,12 +76,12 @@ def create():
 
                 ticket_keys = ["tname", "description", "team", "deadline", "status", "priority", "assigned_for", "points",
                                "submitted_time"]
-                ticket_values = tuple(ticket[key] for key in ticket_keys)
+                ticket_values = tuple([ticket[key] for key in ticket_keys]+[session["mname"]])
                 print(existing_ticket,ticket_values)
                 if existing_ticket is None:
                     print("inserting")
                     db.execute(
-                        f"INSERT INTO {t}(tname, description, team, deadline, status, priority, assigned_for, points, submitted_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                        f"INSERT INTO {t}(tname, description, team, deadline, status, priority, assigned_for, points, submitted_time,assigned_by) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,?)",
                         ticket_values
                     )
                     print("inserted")
@@ -227,14 +227,17 @@ def render(tname):
     if request.method == "POST":
         return jsonify(success=True)
     db = get_db()
-
     t = session["cname"] + "Tickets"
 
     existing_ticket = db.execute(
         f'SELECT * FROM {t} WHERE tname = ?' , (tname,)
     ).fetchone()
+    if existing_ticket:
+        assigned_for = json.loads(existing_ticket['assigned_for']) if existing_ticket['assigned_for'] else []
+    else:
+        assigned_for = []
     print(existing_ticket)
-    return render_template('ticket.html',ticket=existing_ticket,position=session["position"])
+    return render_template('ticket.html',ticket=existing_ticket,position=session["position"],assignedfor=assigned_for,memname=session["mname"])
 
 
 @bp.route("/addmem",methods=["GET","POST"])
@@ -264,7 +267,7 @@ def add_mem():
 @login_required
 def del_mem():
     n = request.form["name"]
-
+    t = session["cname"] + "Tickets"
     db = get_db()
     b = db.execute(
         f"SELECT * FROM belongsTo WHERE club_name=? and mem_name=? ",
@@ -273,9 +276,14 @@ def del_mem():
     print(b)
     if b :
         if b["positioned_in"] not in ["creator" , "president"]:
+
             db.execute(
                 "DELETE FROM belongsTo WHERE mem_name = ? and club_name=?",
                 (n,session["cname"])
+            )
+            db.execute(
+                f"DELETE from {t} WHERE assigned_for=?",
+                (n,)
             )
         else:
             if b["positioned_in"] == "president":
@@ -283,6 +291,10 @@ def del_mem():
                     db.execute(
                         "DELETE FROM belongsTo WHERE mem_name = ? and club_name=?",
                         (n, session["cname"])
+                    )
+                    db.execute(
+                        f"DELETE from {t} WHERE assigned_by=?",
+                        (n,)
                     )
                 else:
                     flash("only creator can delete president")

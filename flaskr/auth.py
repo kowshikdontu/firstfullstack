@@ -43,7 +43,8 @@ def register():
                                 priority TEXT, \
                                 assigned_for TEXT, \
                                 points TEXT,\
-                                submitted_time TEXT \
+                                submitted_time TEXT, \
+                                assigned_by TEXT \
                             );")
                 db.commit()
             except db.IntegrityError:
