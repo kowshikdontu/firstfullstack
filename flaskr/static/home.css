@@ -5,8 +5,8 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
-    color: #333;
+    background: #f3c434;
+    color: rgb(0,0,0);
 }
 
 .container {
@@ -19,7 +19,7 @@ body {
     flex: 3;
     padding: 20px;
     overflow-y: auto;
-    background: linear-gradient(to right, #f8f9fa, #e9ecef);
+
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -42,7 +42,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ffffff;
+    background-color: url('{{ url_for('static', filename='images/home.jpg') }}') no-repeat center center fixed;;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);

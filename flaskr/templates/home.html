@@ -27,16 +27,16 @@
         }
     </style>
 </head>
-<body>
+<body style="background:url(https://img.freepik.com/free-photo/smartphone-template-with-business-elements_23-2147986583.jpg?w=900&t=st=1718286266~exp=1718286866~hmac=afc0d14d09a9b2025275cbc25b7d4a34c85f37d35cef83d72a48cd0948b8bdf3)">
 <div class="container">
     <div class="main-content">
         <main>
             <div class="form1">
                 <p>special</p><br>
-                <div class="form1" style="background-color:rgb(255,231,0);display: flex;flex-direction: column;align-items: center;">
+                <div class="form1" style="display: flex;flex-direction: column;align-items: center;">
                     {% if user in ["president", "creater"] %}
                     <button onclick="toggleForm()" style="padding: 10px; cursor: pointer; border: none; border-radius: 5px;">Manage Members</button>
-                    <form method="POST" id="memberForm" style="display: flex; flex-direction: column; width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f9f9;">
+                    <form method="POST" id="memberForm" style="display: flex; flex-direction: column; width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f949;">
                         <label for="memname" style="margin: 5px 0;">Name</label>
                         <select id="memname" name="nameSelect" style="margin: 5px 0;" onchange="syncInputWithSelect()">
                             <option value="">Select a member...</option>
