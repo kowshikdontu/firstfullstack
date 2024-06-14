@@ -16,9 +16,19 @@ def login_required(view):
         return view(**kwargs)
 
     return wrapped_view
-@bp.route("/", methods=["GET"])
+
+
+@bp.route("/",methods=["GET","POST"])
+def indexPage():
+    loginUrl= url_for("auth.login")
+    registerUrl=url_for("auth.register")
+    return render_template("index.html",ru=registerUrl,lu=loginUrl)
+
+
+
+@bp.route("/<cname>", methods=["GET"])
 @login_required
-def index():
+def index(cname):
     cname = session["cname"]
     t = get_tickets(cname)
     print(session["position"])
@@ -105,7 +115,7 @@ def create():
         else:
             print(error)
             flash(error)
-    return redirect(url_for('home.index'))
+    return redirect(url_for('home.index',cname=session["cname"]))
 
 
 def get_tickets(cname):
@@ -232,10 +242,11 @@ def render(tname):
     existing_ticket = db.execute(
         f'SELECT * FROM {t} WHERE tname = ?' , (tname,)
     ).fetchone()
-    if existing_ticket:
+    try:
         assigned_for = json.loads(existing_ticket['assigned_for']) if existing_ticket['assigned_for'] else []
-    else:
+    except json.JSONDecodeError:
         assigned_for = []
+
     print(existing_ticket)
     return render_template('ticket.html',ticket=existing_ticket,position=session["position"],assignedfor=assigned_for,memname=session["mname"])
 

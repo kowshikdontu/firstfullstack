@@ -8,6 +8,7 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
@@ -80,7 +81,7 @@ def login():
             session['cname'] = member['club_name']
             session["position"]=member["positioned_in"]
             session["clubcode"]=pwd
-            return redirect(url_for('home.index'))
+            return redirect(url_for('home.index',cname=session["cname"]))
 
         flash(error)
 

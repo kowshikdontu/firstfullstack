@@ -6,6 +6,44 @@
     <title>Club Login</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
     <style>
+        body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        background:url(https://img.freepik.com/free-photo/smartphone-template-with-business-elements_23-2147986583.jpg?w=900&t=st=1718286266~exp=1718286866~hmac=afc0d14d09a9b2025275cbc25b7d4a34c85f37d35cef83d72a48cd0948b8bdf3) no-repeat center center fixed;
+        background-size: cover; /* Make the background image cover the entire screen */
+        background-position: center; /* Center the background image */
+        background-repeat: no-repeat; /* Prevent the background image from repeating */
+        background-attachment: fixed; /* Make the background image stable (fixed) */
+        }
+
+        .line-input {
+        background: none !important;
+        border: none !important;
+        border-bottom: 2px solid rgba(0, 0, 0, 1) !important;
+        padding: 10px !important;
+        font-size: 18px !important;
+        color: rgba(0, 0, 0, 1) !important;
+        width: 300px !important;
+        outline: none !important;
+        box-shadow: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        }
+
+        .line-input::placeholder {
+            color: rgba(0, 0, 0, 0.7) !important;
+            opacity: 0.7 !important;
+        }
+
+        .line-input:focus {
+            border-bottom: 2px solid rgba(0, 0, 0, 1) !important;
+        }
+
+
+
         .container {
             display: flex;
             width: 100%;
@@ -27,24 +65,25 @@
         }
     </style>
 </head>
-<body style="background:url(https://img.freepik.com/free-photo/smartphone-template-with-business-elements_23-2147986583.jpg?w=900&t=st=1718286266~exp=1718286866~hmac=afc0d14d09a9b2025275cbc25b7d4a34c85f37d35cef83d72a48cd0948b8bdf3)">
+<body style=>
 <div class="container">
     <div class="main-content">
         <main>
-            <div class="form1">
-                <p>special</p><br>
-                <div class="form1" style="display: flex;flex-direction: column;align-items: center;">
+            <div id="panel" class="form1">
+
+                <div id="toggle" class="Form1" >
+                    <h2 style="font-size:20px;color:rgba(0,0,0,0.7);border:2px;">Presidential access</h2>
                     {% if user in ["president", "creater"] %}
                     <button onclick="toggleForm()" style="padding: 10px; cursor: pointer; border: none; border-radius: 5px;">Manage Members</button>
-                    <form method="POST" id="memberForm" style="display: flex; flex-direction: column; width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color: #f9f949;">
-                        <label for="memname" style="margin: 5px 0;">Name</label>
-                        <select id="memname" name="nameSelect" style="margin: 5px 0;" onchange="syncInputWithSelect()">
+                    <form method="POST" id="memberForm" style="display: flex; flex-direction: column; width: 300px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; background-color:rgba(255,255,255,0.4);">
+                        <label for="memname" style="font-weight:bold;margin: 5px 0;">Name</label>
+                        <select id="memname"  name="nameSelect" style="background:none;;margin: 5px 0;" onchange="syncInputWithSelect()">
                             <option value="">Select a member...</option>
                             {% for i in members %}
                             <option value="{{ i.mem_name }}">{{ i.mem_name }}</option>
                             {% endfor %}
                         </select>
-                        <input type="text" id="memnameInput" name="name" placeholder="Or enter a new member name" style="margin: 5px 0;" oninput="syncSelectWithInput()"><br>
+                        <input type="text" class="line-input" id="memnameInput" name="name" placeholder="Or enter a new member name"  oninput="syncSelectWithInput()"><br>
 
                         <script>
                             function syncInputWithSelect() {
@@ -76,14 +115,15 @@
                                 }
                             }
                         </script>
-                        <div  style="flex-direction:row">
-                            <p style="margin: 5p">Access:</p>
-                            <label for="member1" >Presidential</label>
-                            <input type="radio" id="member1" name="member" value="president">
-                            <label for="member2" >Normal</label>
-                            <input type="radio" id="member2" name="member" value="member" >
-                        </div>
-
+                        {% if user == 'creater' %}
+                            <div  style="flex-direction:row">
+                                <p style="color:rgba(0,0,0);margin: 5p">Access:</p>
+                                <label for="member1" >Presidential</label>
+                                <input type="radio" id="member1" name="member" value="president">
+                                <label for="member2" >Normal</label>
+                                <input type="radio" id="member2" name="member" value="member" >
+                            </div>
+                        {% endif %}
                         <button type="button" onclick="addAction()" style="padding: 10px; margin-top: 10px; cursor: pointer; border: none; border-radius: 5px;">Add Member</button>
                         <button type="button" onclick="deleteAction()" style="padding: 10px; margin-top: 10px; cursor: pointer; border: none; border-radius: 5px;">Delete Member</button>
 
@@ -137,11 +177,12 @@
                             }
                         </script>
                     </form>
-                </div><br>
-                <h3>CREATE NEW TICKET:</h3>
+
+                <h5 style="font-size:20px;color:rgba(0,0,0,0.7);border:2px;" >Create New Ticket:</h5>
                 <button type="button" onclick="showTicketDetail('new')" style="padding: 10px; margin-top: 10px; cursor: pointer; border: none; border-radius: 5px;">Create</button>
+                </div><br>
             </div><br>
-            <div style="background-color:rgb(255,231,0);width:500px;height:500px;flex-direction: column;align-items: center;">
+            <div style="width:500px;height:500px;flex-direction: column;align-items: center;">
                 {% endif %}
                 <br>
 
@@ -175,7 +216,7 @@
         var newUrl = "/"+ticketId+baseUrl  ;
         var iframeContainer = document.querySelector('.iframe-container');
         var iframe = document.getElementById('ticket-form-iframe');
-        if (iframe.src && iframe.style.display === 'block' && iframe.src === newUrl) {
+        if ( iframe.style.display === 'block' && iframe.src === newUrl) {
             iframeContainer.style.display = 'none';
         } else {
 

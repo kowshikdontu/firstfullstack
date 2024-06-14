@@ -27,7 +27,7 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
     from . import analysis
-    app.register_blueprint(analysis.bp FLASK_APP)
+    app.register_blueprint(analysis.bp)
 
 
 
