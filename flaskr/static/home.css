@@ -147,7 +147,9 @@
 .ticket p {
 
     display: flex;
+    flex-direction:bottom;
     flex-wrap: wrap;
+
     align-items: center;
     margin: 5px 0;
     color: rgb(0,0,0);
@@ -156,7 +158,45 @@
 .ticket p:last-child {
     color: #d9534f;
 }
+header {
+    background-color: rgba(0,0,0,0.7);
+    width: 100%;
 
+    color: white;
+    padding: 10px 20px;
+    height: 50px;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header .logo {
+
+    font-size: 1.5em;
+}
+
+nav {
+
+    position: absolute;
+    right: 20vh;
+    bottom: 3vh;
+}
+
+nav a {
+
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 1em;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
 /* Button styling */
 button {
     padding: 10px 20px;

@@ -15,6 +15,7 @@ def get_club_progress(club_name):
         SUM(CASE WHEN priority = 'high priority' THEN 1 ELSE 0 END) AS high_priority,
         SUM(CASE WHEN priority = 'low priority' THEN 1 ELSE 0 END) AS low_priority
         FROM {tTable_id}
+        WHERE status = "completed"
         """
     ).fetchone()
 
@@ -24,6 +25,7 @@ def get_club_progress(club_name):
         SUM(CASE WHEN priority = 'high priority' THEN 1 ELSE 0 END) AS high_priority, 
         SUM(CASE WHEN priority = 'low priority' THEN 1 ELSE 0 END) AS low_priority 
         FROM {tTable_id}
+        WHERE status = "completed"
         GROUP BY assigned_for
         ORDER BY total_points DESC
         """
@@ -37,4 +39,7 @@ def get_club_progress(club_name):
 def progress():
     club_name = session.get('cname')
     club_progress, top_performers = get_club_progress(club_name)
-    return render_template('analysis.html', club_progress=club_progress, top_performers=top_performers)
+    home_url = url_for("home.index", cname=session["cname"])
+    analysis_url = url_for("analysis.progress")
+    logout_url = url_for("auth.logout")
+    return render_template('analysis.html', club_progress=club_progress, top_performers=top_performers,hurl=home_url,aurl=analysis_url,lurl=logout_url,cname=club_name)

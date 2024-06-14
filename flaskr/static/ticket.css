@@ -1,8 +1,6 @@
-/* ticket.css */
-
-/* Styles for the ticket form */
 #ticketForm {
     margin-bottom: 20px;
+    overflow: hidden; /* Prevent overflow */
 }
 
 label {
@@ -40,12 +38,14 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* Container for the form */
+
 .flex-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    padding: 20px; /* Add padding */
+    overflow: auto; /* Handle overflow */
 }
 
 .main-content {
@@ -55,9 +55,9 @@ button:hover {
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    overflow: auto; /* Handle overflow */
 }
 
-/* Styles for the iframe */
 .ticket-iframe {
     width: 100%;
     height: 100%;

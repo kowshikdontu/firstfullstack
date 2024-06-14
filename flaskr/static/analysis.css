@@ -2,7 +2,11 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #e9e9e9;
+    background: url('steps.jpg');
+    background-size: cover; /* Make the background image cover the entire screen */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent the background image from repeating */
+    background-attachment: fixed; /* Make the background image stable (fixed) */
 }
 
 .container {
@@ -10,7 +14,7 @@ body {
     margin: 50px auto;
     padding: 20px;
     border-radius: 5px;
-    background-color: #ffffff;
+    background-color: rgba(0,0,0,0.3);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -24,7 +28,45 @@ body {
 .header {
     text-align: center;
 }
+header {
+    background-color: rgba(0,0,0,0.7);
+    width: 100%;
 
+    color: white;
+    padding: 10px 20px;
+    height: 50px;
+    z-index: 1000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+header .logo {
+
+    font-size: 1.5em;
+}
+
+nav {
+
+    position: absolute;
+    right: 20vh;
+    bottom: 3vh;
+}
+
+nav a {
+
+    color: white;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 1em;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
 .header h1 {
     font-size: 2em;
     color: #333333;
@@ -33,7 +75,7 @@ body {
 .blackbox {
     width: 300px;
     padding: 20px;
-    background-color: #282828;
+    background-color: rgba(255,255,255,0.4);
     border-radius: 10px;
     text-align: center;
     margin: 0; /* Remove the margin so it aligns properly */
@@ -43,7 +85,7 @@ body {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    background-color: #181818;
+    background-color: rgba(0,0,0,0.3);
     position: relative;
     margin: 20px auto;
 }

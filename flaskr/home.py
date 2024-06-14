@@ -21,7 +21,8 @@ def login_required(view):
 @bp.route("/",methods=["GET","POST"])
 def indexPage():
     loginUrl= url_for("auth.login")
-    registerUrl=url_for("auth.register")
+    registerUrl= url_for("auth.register")
+
     return render_template("index.html",ru=registerUrl,lu=loginUrl)
 
 
@@ -45,8 +46,11 @@ def index(cname):
         "SELECT DISTINCT mem_name FROM belongsTo WHERE club_name=?",
         (cname,)
     )
+    home_url = url_for("home.index",cname=cname)
+    analysis_url = url_for("analysis.progress")
+    logout_url = url_for("auth.logout")
     print(dict(tickets))
-    return render_template("home.html", tickets=tickets,sections=s,user=session["position"],members=m)
+    return render_template("home.html", tickets=tickets,sections=s,user=session["position"],members=m,hurl=home_url,aurl=analysis_url,lurl=logout_url)
 
 
 @bp.route("/crud", methods=("GET", "POST"))
@@ -151,7 +155,7 @@ def requested( tname):
     cname = session["cname"]
     db = get_db()
     p = get_ticket(cname, tname)
-    if p["status"] == "available":
+    if p["status"] in [ "available","requested"]:
         # Ensure assigned_for is properly initialized
         if p["assigned_for"]:
             try:
@@ -243,7 +247,10 @@ def render(tname):
         f'SELECT * FROM {t} WHERE tname = ?' , (tname,)
     ).fetchone()
     try:
-        assigned_for = json.loads(existing_ticket['assigned_for']) if existing_ticket['assigned_for'] else []
+        if existing_ticket:
+            assigned_for = json.loads(existing_ticket['assigned_for']) if existing_ticket['assigned_for'] else []
+        else:
+            assigned_for=''
     except json.JSONDecodeError:
         assigned_for = []
 

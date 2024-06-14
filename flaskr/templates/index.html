@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login and Register</title>
+    <header>
+        <div class="logo">Club Management</div>
+        <div class="navab">
+        </div>
+    </header>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='index.css') }}">
 </head>
 <body>
     <div class="context">
-        <h1>Welcome to our page,<br> go ahead with your CLUB</h1>
-    </div>
+        <h1><i> 'Unlock the door to your club's future <br>– Login to continue or create your own adventure!</i></h1>
+    </div><br>
     <div class="container">
         <div class="box login-box">
             <a href="#" onclick="loginPage()" id="loginLink" class="link">Login</a>
@@ -34,10 +39,10 @@
     </div>
     <script>
         function loginPage() {
-
             var llink = document.getElementById('loginLink');
             llink.href = "{{ lu }}";
         }
+
         function registerPage() {
             var rlink = document.getElementById('registerLink');
             rlink.href = "{{ ru }}";

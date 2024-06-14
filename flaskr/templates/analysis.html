@@ -5,11 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Overall Progress</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='analysis.css') }}">
+    <header>
+        <div class="logo">Club Management</div>
+        <div class="navab">
+            <nav>
+                <div class="links">
+                    <a href="{{ hurl }}">Home</a>
+                    <a href="{{ aurl }}">analysis</a>
+                    <a href="{{ lurl }}">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
 </head>
 <body>
     <div class="container">
         <div class="header-container">
             <div class="header">
+                <h1>{{ cname }}</h1>
+                <br>
                 <h1>CLUB PROGRESS</h1>
             </div>
             <div class="blackbox">
@@ -17,34 +31,15 @@
                     <div class="progress solved"></div>
                     <div class="progress attempting"></div>
                     <div class="progress hard"></div>
-                    <div class="number">3000</div>
+                    <div class="number">{{ club_progress["total_points"] }}</div>
                 </div>
                 <div class="label">
                     <i class="points"></i>Total Points
                 </div>
                 <div class="priority">
-                    <button class="hard">HIGH PRIORITY<br>100</button>
-                    <button class="easy">LOW PRIORITY<br>709</button>
+                    <button class="hard">HIGH PRIORITY<br>{{ club_progress["high_priority"] }} </button>
+                    <button class="easy">LOW PRIORITY<br>{{ club_progress["low_priority"] }}</button>
                 </div>
-            </div>
-        </div>
-        <div class="overall-progress">
-            <h2>Overall Progress</h2>
-            <div class="progress-item">
-                <span class="label">Club Name:</span>
-                <span class="value">{{ club_progress['club_name'] }}</span>
-            </div>
-            <div class="progress-item">
-                <span class="label">Total Points:</span>
-                <span class="value">{{ club_progress['total_points'] }}</span>
-            </div>
-            <div class="progress-item">
-                <span class="label">High Priority:</span>
-                <span class="value">{{ club_progress['high_priority'] }}</span>
-            </div>
-            <div class="progress-item">
-                <span class="label">Low Priority:</span>
-                <span class="value">{{ club_progress['low_priority'] }}</span>
             </div>
         </div>
         <div class="topper-list">
@@ -63,7 +58,7 @@
                     {% for performer in top_performers %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ performer['mem_name'] }}</td>
+                        <td>{{ performer['assigned_for'] }}</td>
                         <td>{{ performer['total_points'] }}</td>
                         <td>{{ performer['high_priority'] }}</td>
                         <td>{{ performer['low_priority'] }}</td>

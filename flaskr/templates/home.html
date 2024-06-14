@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Club Login</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='home.css') }}">
+    <header>
+        <div class="logo">Club Management</div>
+        <div class="navab">
+            <nav>
+                <div class="links">
+                    <a href="{{ hurl }}">Home</a>
+                    <a href="{{ aurl }}">analysis</a>
+                    <a href="{{ lurl }}">Logout</a>
+                </div>
+            </nav>
+        </div>
+    </header>
     <style>
         body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -66,6 +78,8 @@
     </style>
 </head>
 <body style=>
+<br>
+<br>
 <div class="container">
     <div class="main-content">
         <main>
@@ -193,8 +207,11 @@
                     <div class="tickets" id="tickets">
                         {% for ticket in tickets[sec] %}
                         <div class="ticket" data-ticket-name="{{ ticket.name }}" onclick="showTicketDetail( '{{ ticket.tname }}' )">
-                            <h3>{{ ticket.name }}</h3>
-                            <p>{{ ticket.description }}</p>
+
+                            <div style="max-width:30vh;display:flex;flex-direction:column;word-wrap: break-word;">
+                            <br>
+                            {{ ticket.tname +"\n"+ticket.description }}
+                            </div>
                             <p style="color:rgba(255,0,0,0.6);">Status: {{ ticket.status }}</p>
                         </div>
                         {% endfor %}
