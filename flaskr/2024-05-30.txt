@@ -1,2 +1,0 @@
-16:51:26.111142 dinesh ['premium'] 20
-19:00:14.597232 Dinesh ['premium'] 20
