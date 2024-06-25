@@ -109,7 +109,7 @@ The workflow for managing tickets is as follows:
    - Points are awarded to the member.
 
 ### Flowchart
- ![Project Logo](images/flow.png)
+ ![Project Logo](flaskr/static/images/flow.png)
 
 ## Club Rules
 ### Club Creator:
