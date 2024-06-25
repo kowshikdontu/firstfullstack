@@ -2,6 +2,8 @@
 
 Welcome to the Club Management Portal! This project is designed to provide an interface for club members to log in, register, manage tickets, and perform various administrative tasks. Below you'll find all the necessary information to set up, run, and contribute to this project.
 
+## real-time problem soloving project!
+
 ## Table of Contents
 
 - [Features](#features)
@@ -135,4 +137,29 @@ The workflow for managing tickets is as follows:
 - POST /create_ticket: Create a new ticket.
 - GET /ticket/<ticket_id>: Get details of a specific ticket.
 
-  
+# Contributing
+## Contributions are welcome! Please follow these steps:
+
+#### Fork the repository.
+
+#### Create a new branch:
+
+    ```sh
+    git checkout -b feature/your-feature-name
+    ```
+
+#### Make your changes.
+
+#### Commit your changes:
+
+```sh
+ git commit -m "Add your message here"
+```
+
+#### Push to the branch:
+
+```sh
+git push origin feature/your-feature-name
+```
+
+#### Open a pull request.
